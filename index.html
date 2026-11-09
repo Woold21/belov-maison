@@ -131,6 +131,60 @@ section.menu:last-of-type{min-height:calc(100vh - 200px)}
 footer.chef .sig{font-size:17px}
 .fe{font-size:13px;font-weight:500;padding:2px 10px 3px}
 .pair{font-size:14px}
+/* ---------- order / cart ---------- */
+.dish-wrap{position:relative}
+.dish{padding-right:60px}
+.add{position:absolute;right:10px;bottom:10px;min-width:40px;height:40px;padding:0 12px;border-radius:99px;border:1px solid rgba(217,195,160,.35);background:rgba(217,195,160,.12);color:var(--champ);font:600 15px/1 var(--font);display:flex;align-items:center;justify-content:center;gap:4px;cursor:pointer;transition:background .2s,color .2s,transform .15s}
+.add:hover{background:rgba(217,195,160,.22)}
+.add:active{transform:scale(.94)}
+.add.on{background:var(--champ);color:var(--champ-ink);border-color:var(--champ)}
+.add svg{width:18px;height:18px}
+.add:focus-visible,.cartbar button:focus-visible,.step button:focus-visible,.chip:focus-visible,.primary:focus-visible,.ghost:focus-visible{outline:2px solid var(--champ);outline-offset:2px}
+
+.cartbar{position:fixed;left:0;right:0;bottom:0;z-index:35;padding:0 max(12px,env(safe-area-inset-right,0px)) calc(12px + env(safe-area-inset-bottom,0px)) max(12px,env(safe-area-inset-left,0px));pointer-events:none}
+.cartbar button{pointer-events:auto;display:flex;align-items:center;justify-content:space-between;gap:12px;width:100%;max-width:560px;margin:0 auto;padding:10px 10px 10px 18px;border-radius:24px;color:var(--fg);font:inherit;cursor:pointer;animation:up .3s cubic-bezier(.2,.8,.2,1)}
+.cartbar .cb-l{display:flex;flex-direction:column;align-items:flex-start;gap:1px;min-width:0}
+.cartbar .cb-l b{font-size:15px;font-weight:600}
+.cartbar .cb-l span{font-size:13px;color:var(--mut);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:56vw}
+.cartbar .cb-r{flex:none;background:var(--champ);color:var(--champ-ink);font-weight:600;font-size:15px;padding:12px 18px;border-radius:18px}
+body.has-cart .app{padding-bottom:110px}
+
+.sheet-add{display:flex;align-items:center;gap:12px;margin-top:16px}
+.step{display:flex;align-items:center;gap:4px;padding:4px;border-radius:99px;background:rgba(255,255,255,.06);border:1px solid var(--stroke)}
+.step button{width:36px;height:36px;border-radius:50%;border:0;background:rgba(255,255,255,.08);color:var(--fg);font:600 18px/1 var(--font);cursor:pointer;display:grid;place-items:center}
+.step output{min-width:26px;text-align:center;font-weight:600;font-variant-numeric:tabular-nums}
+.primary{flex:1;min-height:48px;border:0;border-radius:18px;background:var(--champ);color:var(--champ-ink);font:600 16px/1.2 var(--font);cursor:pointer;padding:12px 18px}
+.primary:active{transform:scale(.98)}
+.primary[disabled]{opacity:.45;cursor:not-allowed}
+.ghost{min-height:44px;border-radius:16px;border:1px solid var(--stroke);background:transparent;color:var(--fg);font:500 15px/1.2 var(--font);cursor:pointer;padding:10px 16px}
+
+.c-head{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.c-head h3{margin:0;font-size:24px;font-weight:600;letter-spacing:-.3px}
+.c-list{display:flex;flex-direction:column;gap:8px;margin-top:14px}
+.c-item{display:grid;grid-template-columns:52px minmax(0,1fr) auto;gap:12px;align-items:center;padding:8px;border-radius:18px}
+.c-item.np{grid-template-columns:minmax(0,1fr) auto;padding-left:14px}
+.c-item .ph{width:52px;height:52px;border-radius:14px}
+.c-item .ph em{display:none}
+.c-item .ph svg{width:18px;height:18px}
+.c-item .nm{font-size:15px;font-weight:600;line-height:1.3}
+.c-item .sc{font-size:12px;color:var(--mut)}
+.c-label{margin:22px 0 10px;font-family:var(--accent);font-size:17px;color:var(--champ)}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{font:500 14px/1 var(--font);color:var(--fg);background:rgba(255,255,255,.06);border:1px solid var(--stroke);border-radius:99px;padding:10px 14px;cursor:pointer;font-variant-numeric:tabular-nums}
+.chip[aria-pressed="true"]{background:var(--champ);color:var(--champ-ink);border-color:var(--champ)}
+.chip[disabled]{opacity:.3;cursor:not-allowed;text-decoration:line-through}
+.times{display:grid;grid-template-columns:repeat(auto-fill,minmax(74px,1fr));gap:8px}
+.times .chip{padding:11px 0;text-align:center}
+textarea.wish{width:100%;min-height:76px;resize:vertical;border-radius:16px;border:1px solid var(--stroke);background:rgba(255,255,255,.05);color:var(--fg);font:400 15px/1.45 var(--font);padding:12px 14px}
+textarea.wish::placeholder{color:var(--mut)}
+textarea.wish:focus{outline:2px solid var(--champ);outline-offset:1px}
+.c-send{display:flex;flex-direction:column;gap:10px;margin-top:22px}
+.c-hint{margin:0;font-size:13px;color:var(--mut);text-align:center}
+.c-empty,.c-done{display:flex;flex-direction:column;align-items:center;text-align:center;gap:10px;padding:26px 6px 8px}
+.c-empty p,.c-done p{margin:0;color:var(--mut);max-width:36ch}
+.c-done h4{margin:0;font-size:22px;font-weight:600}
+.c-done svg{width:44px;height:44px;color:var(--champ)}
+.c-err{margin:0;font-size:13px;color:#F2B8A0;text-align:center}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
 </style>
 <style>html,body{margin:0}[hidden]{display:none!important}img{max-width:100%}:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}</style>
@@ -167,8 +221,17 @@ footer.chef .sig{font-size:17px}
 </div>
 
 <div class="scrim" id="scrim" hidden></div>
+<div class="cartbar" id="cartbar" hidden>
+  <button class="glass" id="cartbar-btn" type="button">
+    <span class="cb-l"><b id="cb-count"></b><span id="cb-names"></span></span>
+    <span class="cb-r">Оформити</span>
+  </button>
+</div>
+
 <div class="sheet glass" id="sheet" role="dialog" aria-modal="true" aria-labelledby="sh-title" hidden>
   <div class="handle-zone" aria-hidden="true"><div class="handle"></div></div>
+  <div id="pane-cart" hidden></div>
+  <div id="pane-dish">
   <div class="ph" id="sh-ph"></div>
   <div class="sh-head">
     <div style="display:flex;flex-direction:column;gap:8px;min-width:0">
@@ -181,6 +244,8 @@ footer.chef .sig{font-size:17px}
   </div>
   <p class="sh-desc" id="sh-desc"></p>
   <div class="why glass" id="sh-why"><b>Чому це корисно</b><p id="sh-why-t"></p></div>
+  <div class="sheet-add" id="sh-add"></div>
+  </div>
 </div>
 
 <script>
@@ -282,9 +347,10 @@ MENU.forEach((sec,si)=>{
   sec.items.forEach((_,i)=>{
     const d=dishOf(sec,i),k=sec.kind||'';
     const thumb=k==='np'?'':'<div class="ph">'+ph(d.photo,d.name)+'</div>';
-    list+='<button class="dish glass '+k+'" type="button" data-s="'+si+'" data-i="'+i+'">'+thumb+
+    list+='<div class="dish-wrap"><button class="dish glass '+k+'" type="button" data-s="'+si+'" data-i="'+i+'">'+thumb+
       '<div><div class="dn"><span>'+esc(d.name)+'</span>'+(d.fe?'<span class="fe">Fe+</span>':'')+'</div>'+
-      '<div class="dd">'+esc(d.desc)+'</div>'+(d.pair?'<div class="pair">'+esc(d.pair)+'</div>':'')+'</div></button>';
+      '<div class="dd">'+esc(d.desc)+'</div>'+(d.pair?'<div class="pair">'+esc(d.pair)+'</div>':'')+'</div></button>'+
+      '<button class="add" type="button" data-add="'+si+'.'+i+'" aria-label="Додати «'+esc(d.name)+'» до замовлення"></button></div>';
   });
   mHtml+='<section class="menu" id="'+sec.id+'" aria-labelledby="h-'+sec.id+'"><div class="sec-h"><h2 id="h-'+sec.id+'">'+esc(sec.t)+'</h2><span>'+esc(sec.s)+'</span></div>'+
     (sec.note?'<div class="note glass">'+CLOCK+'<span>'+esc(sec.note)+'</span></div>':'')+
@@ -352,12 +418,17 @@ function openDish(si,i){
   document.getElementById('sh-fe').innerHTML=d.fe?'<span class="fe">Fe+ багато заліза</span>':'';
   document.getElementById('sh-desc').textContent=d.desc+(d.pair?' · '+d.pair:'');
   document.getElementById('sh-why-t').textContent=d.why;
+  curDish=si+'.'+i;renderSheetAdd();
+  paneCart.hidden=true;paneDish.hidden=false;
+  showSheet(document.getElementById('sh-close'));
+}
+function showSheet(focusEl){
   lastFocus=document.activeElement;
   closing=false;
   sheet.style.transition='';sheet.style.transform='';scrim.style.transition='';scrim.style.opacity='';
   scrim.hidden=false;sheet.hidden=false;sheet.scrollTop=0;
   document.documentElement.classList.add('locked');
-  document.getElementById('sh-close').focus({preventScroll:true});
+  if(focusEl)focusEl.focus({preventScroll:true});
   if(tg&&tg.BackButton){try{tg.BackButton.show()}catch(e){}}
   tgSwipes(false);
 }
@@ -381,9 +452,114 @@ function closeDish(){
 }
 document.addEventListener('click',e=>{
   if(!sheet.hidden)return;
+  const a=e.target.closest('.add');
+  if(a){const k=a.dataset.add;setQty(k,qty(k)+1);haptic();return}
   const b=e.target.closest('.dish,.hero');
   if(b)openDish(+b.dataset.s,+b.dataset.i);
 });
+
+/* ---------- order: cart, time, send to the chef in Telegram ---------- */
+const CHEF='sergey_blv';
+const paneCart=document.getElementById('pane-cart'),paneDish=document.getElementById('pane-dish');
+const cartbar=document.getElementById('cartbar');
+let cart={},curDish=null,when={day:0,time:''},wish='';
+try{const s=JSON.parse(localStorage.getItem('bm-cart')||'{}');if(s&&typeof s==='object'){cart=s.cart||{};wish=s.wish||''}}catch(e){}
+Object.keys(cart).forEach(k=>{const [s,i]=k.split('.').map(Number);if(!MENU[s]||!MENU[s].items[i]||!(cart[k]>0))delete cart[k]});
+function save(){try{localStorage.setItem('bm-cart',JSON.stringify({cart,wish}))}catch(e){}}
+function qty(k){return cart[k]||0}
+function haptic(){try{tg&&tg.HapticFeedback&&tg.HapticFeedback.impactOccurred('light')}catch(e){}}
+function setQty(k,n){n=Math.max(0,Math.min(20,n));if(n)cart[k]=n;else delete cart[k];save();renderAll()}
+function cartKeys(){return Object.keys(cart)}
+function cartCount(){return cartKeys().reduce((a,k)=>a+cart[k],0)}
+function nameOf(k){const [s,i]=k.split('.').map(Number);return MENU[s].items[i][0]}
+const PLUS='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>';
+function word(n){const a=n%10,b=n%100;if(a===1&&b!==11)return'страва';if(a>=2&&a<=4&&(b<12||b>14))return'страви';return'страв'}
+function renderAll(){
+  document.querySelectorAll('.add').forEach(b=>{const n=qty(b.dataset.add);b.classList.toggle('on',n>0);b.innerHTML=n?'×'+n:PLUS});
+  const n=cartCount();
+  cartbar.hidden=n===0;document.body.classList.toggle('has-cart',n>0);
+  if(n){document.getElementById('cb-count').textContent='Замовлення · '+n+' '+word(n);document.getElementById('cb-names').textContent=cartKeys().map(nameOf).join(', ')}
+  if(!sheet.hidden&&!paneDish.hidden)renderSheetAdd();
+  if(!sheet.hidden&&!paneCart.hidden&&!cartDone)renderCart();
+}
+function renderSheetAdd(){
+  const box=document.getElementById('sh-add'),n=qty(curDish);
+  box.innerHTML=n
+    ?'<div class="step"><button type="button" data-q="-1" aria-label="Менше">−</button><output>'+n+'</output><button type="button" data-q="1" aria-label="Більше">+</button></div><button class="primary" type="button" data-go="cart">До замовлення</button>'
+    :'<button class="primary" type="button" data-q="1">Додати до замовлення</button>';
+}
+document.getElementById('sh-add').addEventListener('click',e=>{
+  const q=e.target.closest('[data-q]');if(q){setQty(curDish,qty(curDish)+(+q.dataset.q));haptic();return}
+  if(e.target.closest('[data-go="cart"]'))openCart();
+});
+
+/* time slots: today / tomorrow, 08:00–22:00 every 30 min; today's past slots (and the next 30 min) are disabled */
+const DAYS=['Сьогодні','Завтра'];
+function slots(){const r=[];for(let m=8*60;m<=22*60;m+=30)r.push(String(Math.floor(m/60)).padStart(2,'0')+':'+String(m%60).padStart(2,'0'));return r}
+function slotOk(day,t){if(day>0)return true;const now=new Date(),[h,m]=t.split(':').map(Number);return h*60+m>=now.getHours()*60+now.getMinutes()+30}
+function fixWhen(){
+  if(!DAYS[when.day])when.day=0;
+  if(!slots().some(t=>slotOk(0,t))&&when.day===0)when.day=1;
+  if(!when.time||!slotOk(when.day,when.time))when.time=slots().find(t=>slotOk(when.day,t))||'';
+}
+let cartDone=false;
+function openCart(){cartDone=false;fixWhen();renderCart();paneDish.hidden=true;paneCart.hidden=false;showSheet(paneCart.querySelector('.close'));sheet.scrollTop=0}
+const XICON='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>';
+function renderCart(){
+  const keys=cartKeys();
+  let h='<div class="c-head"><h3 id="c-title">Ваше замовлення</h3><button class="close glass" type="button" data-close aria-label="Закрити">'+XICON+'</button></div>';
+  if(!keys.length){
+    h+='<div class="c-empty"><p>Кошик порожній. Натисніть «+» біля страви в меню, щоб додати її.</p><button class="ghost" type="button" data-close>До меню</button></div>';
+    paneCart.innerHTML=h;return;
+  }
+  h+='<div class="c-list">';
+  keys.forEach(k=>{const [s,i]=k.split('.').map(Number),sec=MENU[s],d=dishOf(sec,i),np=sec.kind==='np';
+    h+='<div class="c-item glass'+(np?' np':'')+'">'+(np?'':'<div class="ph">'+ph(d.photo,d.name)+'</div>')+
+    '<div style="min-width:0"><div class="nm">'+esc(d.name)+'</div><div class="sc">'+esc(sec.t)+'</div></div>'+
+    '<div class="step"><button type="button" data-k="'+k+'" data-d="-1" aria-label="Менше: '+esc(d.name)+'">−</button><output>'+cart[k]+'</output><button type="button" data-k="'+k+'" data-d="1" aria-label="Більше: '+esc(d.name)+'">+</button></div></div>'});
+  h+='</div><div class="c-label">Коли подати</div><div class="chips" role="group" aria-label="День">';
+  DAYS.forEach((d,i)=>{const any=slots().some(t=>slotOk(i,t));h+='<button class="chip" type="button" data-day="'+i+'" aria-pressed="'+(when.day===i)+'"'+(any?'':' disabled')+'>'+d+'</button>'});
+  h+='</div><div class="times" role="group" aria-label="Час" style="margin-top:10px">';
+  slots().forEach(t=>{const ok=slotOk(when.day,t);h+='<button class="chip" type="button" data-time="'+t+'" aria-pressed="'+(when.time===t)+'"'+(ok?'':' disabled')+'>'+t+'</button>'});
+  h+='</div><label class="c-label" for="wish" style="display:block">Побажання до замовлення</label><textarea class="wish" id="wish" maxlength="400" placeholder="Наприклад: без цибулі, соус окремо">'+esc(wish)+'</textarea>';
+  h+='<div class="c-send"><button class="primary" type="button" id="send"'+(when.time?'':' disabled')+'>Надіслати замовлення</button><p class="c-hint">Відкриється чат із шефом з готовим текстом замовлення. Залишиться натиснути «Надіслати».</p><p class="c-err" id="c-err" hidden></p></div>';
+  paneCart.innerHTML=h;
+}
+paneCart.addEventListener('input',e=>{if(e.target.id==='wish'){wish=e.target.value;save()}});
+paneCart.addEventListener('click',e=>{
+  if(e.target.closest('[data-close]')){closeDish();return}
+  const st=e.target.closest('[data-k]');if(st){setQty(st.dataset.k,qty(st.dataset.k)+(+st.dataset.d));haptic();return}
+  const dy=e.target.closest('[data-day]');if(dy&&!dy.disabled){when.day=+dy.dataset.day;when.time='';fixWhen();renderCart();return}
+  const tm=e.target.closest('[data-time]');if(tm&&!tm.disabled){when.time=tm.dataset.time;renderCart();return}
+  if(e.target.closest('#send'))sendOrder();
+  if(e.target.closest('[data-new]')){cart={};wish='';save();cartDone=false;renderAll();closeDish()}
+});
+function orderText(){
+  const d=new Date();if(when.day)d.setDate(d.getDate()+when.day);
+  const date=String(d.getDate()).padStart(2,'0')+'.'+String(d.getMonth()+1).padStart(2,'0');
+  let t='Замовлення Belov Maison\nКоли: '+DAYS[when.day].toLowerCase()+' ('+date+'), '+when.time+'\n\n';
+  cartKeys().forEach(k=>{t+='• '+nameOf(k)+(cart[k]>1?' ×'+cart[k]:'')+'\n'});
+  if(wish.trim())t+='\nПобажання: '+wish.trim()+'\n';
+  return t;
+}
+function sendOrder(){
+  fixWhen();
+  if(!when.time){renderCart();return}
+  const text=orderText();
+  const url='https://t.me/'+CHEF+'?text='+encodeURIComponent(text);
+  let opened=false;
+  try{if(tg&&tg.openTelegramLink){tg.openTelegramLink(url);opened=true}}catch(e){}
+  if(!opened){const w=window.open(url,'_blank','noopener');opened=!!w;if(!opened){location.href=url;opened=true}}
+  try{navigator.clipboard&&navigator.clipboard.writeText(text).catch(()=>{})}catch(e){}
+  cartDone=true;
+  paneCart.innerHTML='<div class="c-head"><h3>Майже готово</h3><button class="close glass" type="button" data-close aria-label="Закрити">'+XICON+'</button></div>'+
+    '<div class="c-done"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 2 11 13"/><path d="M22 2 15 22l-4-9-9-4z"/></svg>'+
+    '<h4>Надішліть повідомлення шефу</h4><p>У чаті з @'+CHEF+' уже є текст замовлення. Натисніть «Надіслати», і шеф отримає його.</p>'+
+    '<p>Якщо чат не відкрився, текст замовлення скопійовано. Вставте його в чат із @'+CHEF+'.</p>'+
+    '<div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:6px"><button class="ghost" type="button" id="send">Відкрити чат ще раз</button><button class="primary" type="button" data-new style="flex:none">Нове замовлення</button></div></div>';
+}
+document.getElementById('cartbar-btn').addEventListener('click',openCart);
+renderAll();
 
 /* swipe down to close: from the handle anywhere, or from the content when it is scrolled to the top */
 let sy=null,dy=0,st=0,dragging=false;
