@@ -1,0 +1,430 @@
+<!doctype html>
+<html lang="uk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0A1326">
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<title>Belov Maison</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700&family=Playfair+Display:wght@400;500;600&display=swap">
+<style>
+/* Layout: one dark "midnight" glass app — sticky glass header with category pills, chef's pick hero, sections of glass dish rows, bottom sheet for details */
+:root{
+  --bg:#0A1326;
+  --bg-2:#101C38;
+  --glass:rgba(255,255,255,.065);
+  --glass-2:rgba(255,255,255,.11);
+  --stroke:rgba(255,255,255,.13);
+  --hi:rgba(255,255,255,.24);
+  --fg:#F3EDE1;
+  --mut:#AAB1C3;
+  --champ:#D9C3A0;
+  --champ-ink:#14100A;
+  --ph:rgba(217,195,160,.07);
+  --font:'Onest',ui-sans-serif,system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;
+  --accent:'Playfair Display',Georgia,'Times New Roman',serif;
+  --r-card:22px;
+  --r-thumb:18px;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{background:var(--bg)}
+body{background:var(--bg);color:var(--fg);font-family:var(--font);font-size:15px;line-height:1.5;-webkit-font-smoothing:antialiased;min-height:100%;overflow-x:hidden}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:30;background:var(--bg)}
+.aura{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+.aura i{position:absolute;border-radius:50%;filter:blur(70px);opacity:.55}
+.aura i:nth-child(1){width:420px;height:420px;left:-120px;top:-80px;background:#23417F}
+.aura i:nth-child(2){width:360px;height:360px;right:-120px;top:30%;background:#3A3270;opacity:.45}
+.aura i:nth-child(3){width:300px;height:300px;left:10%;bottom:-120px;background:#D9C3A0;opacity:.14}
+.app{position:relative;z-index:1;max-width:880px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:0 48px}
+
+.glass{background:var(--glass);border:1px solid var(--stroke);-webkit-backdrop-filter:blur(22px) saturate(170%);backdrop-filter:blur(22px) saturate(170%);box-shadow:inset 0 1px 0 var(--hi),0 10px 30px rgba(3,8,20,.35)}
+
+header.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;margin:10px -6px 0;padding:14px 14px 12px;border-radius:26px}
+.brandrow{display:flex;align-items:baseline;justify-content:space-between;gap:12px}
+.brand{margin:0;font-size:22px;font-weight:700;letter-spacing:-.4px;line-height:1.1}
+.brand span{color:var(--champ)}
+.brandrow small{font-size:12px;color:var(--mut);letter-spacing:.12em;text-transform:uppercase}
+nav.cats{display:flex;gap:8px;margin-top:12px;overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch;padding-bottom:2px;scroll-snap-type:x proximity}
+nav.cats::-webkit-scrollbar{display:none}
+.cat{flex:none;scroll-snap-align:start;font:500 13px/1 var(--font);color:var(--fg);background:rgba(255,255,255,.06);border:1px solid var(--stroke);border-radius:99px;padding:9px 14px;cursor:pointer;transition:background .2s,color .2s,border-color .2s}
+.cat:hover{background:rgba(255,255,255,.12)}
+.cat[aria-current="true"]{background:var(--champ);color:var(--champ-ink);border-color:var(--champ)}
+.cat:focus-visible,.dish:focus-visible,.hero:focus-visible,.close:focus-visible{outline:2px solid var(--champ);outline-offset:2px}
+
+.intro{margin-top:22px;display:flex;flex-direction:column;gap:6px}
+.intro h2{margin:0;font-size:30px;font-weight:700;letter-spacing:-.6px;line-height:1.15;text-wrap:balance}
+.intro p{margin:0;color:var(--mut);max-width:58ch}
+.legend{display:flex;align-items:center;gap:8px;margin-top:6px;font-size:13px;color:var(--mut)}
+
+.fe{display:inline-flex;align-items:center;font-size:11px;font-weight:600;letter-spacing:.02em;padding:3px 8px;border-radius:99px;background:rgba(217,195,160,.16);color:var(--champ);border:1px solid rgba(217,195,160,.28);white-space:nowrap}
+
+.ph{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;background:var(--ph);border:1px dashed rgba(217,195,160,.35);color:var(--champ);overflow:hidden}
+.ph svg{width:26px;height:26px;opacity:.85}
+.ph em{font-style:normal;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--mut)}
+.ph img{position:absolute;inset:0;width:100%;height:100%;max-width:none;object-fit:cover}
+.ph:has(img){border:0;background:var(--bg-2)}
+
+.hero{display:block;width:100%;text-align:left;margin-top:22px;padding:12px;border-radius:28px;color:inherit;font:inherit;cursor:pointer}
+.hero .ph{aspect-ratio:16/10;max-width:100%;border-radius:20px}
+.hero .ph svg{width:36px;height:36px}
+.hero-body{padding:14px 6px 6px;display:flex;flex-direction:column;gap:4px}
+.eyebrow{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--champ)}
+.hero h3{margin:0;font-size:24px;font-weight:600;letter-spacing:-.3px;line-height:1.2}
+.hero p{margin:0;color:var(--mut)}
+
+section.menu{margin-top:40px;scroll-margin-top:calc(env(safe-area-inset-top,0px) + 130px)}
+.sec-h{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin-bottom:14px}
+.sec-h h2{margin:0;font-size:26px;font-weight:700;letter-spacing:-.5px;line-height:1.15}
+.sec-h span{font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--mut);text-align:right}
+.note{display:flex;gap:10px;align-items:flex-start;padding:12px 14px;border-radius:18px;margin-bottom:12px;font-size:13px;color:var(--mut)}
+.note svg{flex:none;width:18px;height:18px;color:var(--champ);margin-top:1px}
+
+.list{display:grid;grid-template-columns:minmax(0,1fr);gap:10px}
+@media (min-width:720px){.list{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.dish{display:grid;grid-template-columns:84px minmax(0,1fr);gap:14px;align-items:center;width:100%;padding:10px;border-radius:var(--r-card);text-align:left;color:inherit;font:inherit;cursor:pointer;transition:transform .2s ease,background .2s}
+.dish:hover{background:var(--glass-2)}
+.dish:active{transform:scale(.985)}
+.dish .ph{width:84px;height:84px;border-radius:var(--r-thumb)}
+.dish .ph em{display:none}
+.dn{display:flex;align-items:flex-start;justify-content:space-between;gap:8px;font-size:16px;font-weight:600;line-height:1.3}
+.dd{margin-top:3px;font-size:13px;color:var(--mut);line-height:1.45}
+.dish.sm{grid-template-columns:60px minmax(0,1fr)}
+.dish.sm .ph{width:60px;height:60px;border-radius:15px}
+.dish.sm .ph svg{width:20px;height:20px}
+.dish.np{grid-template-columns:minmax(0,1fr);padding:14px 16px}
+.pair{margin-top:6px;font-size:12px;color:var(--champ)}
+
+footer.chef{margin-top:44px;padding:20px;border-radius:26px;display:flex;flex-direction:column;gap:6px}
+footer.chef p{margin:0;color:var(--mut);max-width:60ch}
+footer.chef .sig{margin-top:8px;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--champ)}
+
+.scrim{position:fixed;inset:0;z-index:40;background:rgba(4,8,18,.55);-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px)}
+.sheet{position:fixed;left:0;right:0;bottom:0;z-index:50;max-width:640px;margin:0 auto;max-height:88%;overflow-y:auto;border-radius:30px 30px 0 0;background:rgba(16,28,56,.78);padding:10px max(18px,env(safe-area-inset-right,0px)) calc(22px + env(safe-area-inset-bottom,0px)) max(18px,env(safe-area-inset-left,0px));animation:up .32s cubic-bezier(.2,.8,.2,1)}
+@keyframes up{from{transform:translateY(40px);opacity:0}to{transform:none;opacity:1}}
+.sheet{overscroll-behavior:contain;will-change:transform}
+.handle-zone{margin:-10px 0 0;padding:12px 0 14px;cursor:grab;touch-action:none}
+.handle{width:40px;height:5px;border-radius:9px;background:rgba(255,255,255,.3);margin:0 auto}
+html.locked,html.locked body{overflow:hidden}
+button{-webkit-tap-highlight-color:transparent}
+section.menu:last-of-type{min-height:calc(100vh - 200px)}
+.sheet .ph{aspect-ratio:4/3;max-width:100%;border-radius:22px}
+.sheet .ph svg{width:40px;height:40px}
+.sh-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-top:16px}
+.sh-head h3{margin:0;font-size:24px;font-weight:600;letter-spacing:-.3px;line-height:1.2;text-wrap:balance}
+.close{flex:none;width:40px;height:40px;border-radius:50%;display:grid;place-items:center;color:var(--fg);cursor:pointer;padding:0}
+.close svg{width:18px;height:18px}
+.sh-desc{margin:8px 0 0;color:var(--mut)}
+.why{margin-top:16px;padding:14px 16px;border-radius:18px;display:flex;flex-direction:column;gap:4px}
+.why b{font-size:12px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--champ)}
+.why p{margin:0;font-size:14px}
+
+/* accent labels: upright Playfair Display instead of tracked uppercase */
+.brandrow small,.ph em,.eyebrow,.sec-h span,.why b,footer.chef .sig,.fe,.pair{font-family:var(--accent);font-style:normal;text-transform:none;letter-spacing:0}
+.brandrow small{font-size:16px;color:var(--champ)}
+.ph em{font-size:15px;color:var(--champ);opacity:.85}
+.eyebrow{font-size:17px;font-weight:500}
+.sec-h span{font-size:15px;color:var(--champ);opacity:.9}
+.why b{font-size:17px;font-weight:500}
+footer.chef .sig{font-size:17px}
+.fe{font-size:13px;font-weight:500;padding:2px 10px 3px}
+.pair{font-size:14px}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+</style>
+<style>html,body{margin:0}[hidden]{display:none!important}img{max-width:100%}:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}</style>
+</head>
+<body>
+
+
+<div class="aura" aria-hidden="true"><i></i><i></i><i></i></div>
+
+<div class="app">
+  <header class="top glass">
+    <div class="brandrow">
+      <h1 class="brand">Belov <span>Maison</span></h1>
+      <small>меню</small>
+    </div>
+    <nav class="cats" id="cats" aria-label="Розділи меню"></nav>
+  </header>
+
+  <div class="intro">
+    <h2>Кухня, що додає сил</h2>
+    <p>Кожна страва створена з турботою: у ній є залізо і все, що допомагає йому засвоїтися. Готуємо для однієї дуже важливої гості.</p>
+    <div class="legend"><span class="fe">Fe+</span> багато заліза</div>
+  </div>
+
+  <button class="hero glass" id="hero" type="button"></button>
+
+  <main id="menu"></main>
+
+  <footer class="chef glass">
+    <span class="eyebrow">Порада шефа</span>
+    <p>Чай, каву й молочне ми подаємо окремо, через годину-дві після основної страви. Так ніщо не заважає залізу засвоюватися.</p>
+    <span class="sig">Belov Maison</span>
+  </footer>
+</div>
+
+<div class="scrim" id="scrim" hidden></div>
+<div class="sheet glass" id="sheet" role="dialog" aria-modal="true" aria-labelledby="sh-title" hidden>
+  <div class="handle-zone" aria-hidden="true"><div class="handle"></div></div>
+  <div class="ph" id="sh-ph"></div>
+  <div class="sh-head">
+    <div style="display:flex;flex-direction:column;gap:8px;min-width:0">
+      <h3 id="sh-title"></h3>
+      <span id="sh-fe"></span>
+    </div>
+    <button class="close glass" id="sh-close" type="button" aria-label="Закрити">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+    </button>
+  </div>
+  <p class="sh-desc" id="sh-desc"></p>
+  <div class="why glass" id="sh-why"><b>Чому це корисно</b><p id="sh-why-t"></p></div>
+</div>
+
+<script>
+const CAM='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8.5A2.5 2.5 0 0 1 5.5 6h1.6l1.5-2h6.8l1.5 2h1.6A2.5 2.5 0 0 1 21 8.5v9a2.5 2.5 0 0 1-2.5 2.5h-13A2.5 2.5 0 0 1 3 17.5z"/><circle cx="12" cy="13" r="3.6"/></svg>';
+const CLOCK='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>';
+
+/* photo: вставте сюди посилання або data:-URI фото страви, коли воно буде готове */
+const MENU=[
+{id:'breakfast',t:'Сніданки',s:'зранку до полудня',items:[
+['Гречка «По-купецьки»','Розсипчаста гречана каша, ніжна куряча печінка із золотистою цибулею, салат із солодкого перцю',1,'Куряча печінка дає гемове залізо, яке засвоюється найкраще, а солодкий перець додає вітамін C.'],
+['Вівсянка «Золото Сходу»','Томлена вівсянка з курагою, гарбузовим насінням і підсмаженим кунжутом, скибочки ківі',1,'Овес, курага, гарбузове насіння й кунжут містять рослинне залізо, а ківі допомагає його засвоїти.'],
+['Омлет «Зелений сад»','Повітряний омлет зі шпинатом і черрі',0,'Жовток і шпинат містять залізо, томати черрі додають вітамін C.'],
+['Тартин «Паштет Бєлов»','Фірмовий паштет із курячої печінки на підсмаженому житньому хлібі, свіжий огірок і зелень',1,'Печінковий паштет — одне з найбагатших на залізо блюд у меню.'],
+['Оладки «Гречані»','Пишні гречані оладки з соусом із чорної смородини',0,'Гречка містить залізо, а чорна смородина — багато вітаміну C.'],
+['Яйця пашот «Авокадо-тост»','Яйця пашот на хрусткому тості з авокадо і шпинатом, посипка з кунжуту',0,'Жовтки, шпинат і кунжут разом дають помірну порцію заліза.'],
+['Боул «Енергія»','Кіноа, яйце, печений перець, мікс зелені й насіння',1,'Кіноа й насіння — рослинне залізо, печений перець — вітамін C.']
+]},
+{id:'starters',t:'Закуски',s:'для початку трапези',items:[
+['Паштет «Maison»','Паштет із курячої печінки, журавлинний конфітюр, хрусткі грінки',1,'Печінка — рекордсменка за залізом, журавлина додає вітамін C.'],
+['Хумус «Левант»','Хумус із нуту з тахіні, печений перець, овочеві палички',1,'Нут і кунжутна паста тахіні багаті на залізо, перець допомагає засвоєнню.'],
+['Брускети «Рибальські»','Житні брускети з сардинами, лимоном і петрушкою',1,'Сардини дають гемове залізо, лимон і петрушка — вітамін C.'],
+['Квасоляна ікра «По-домашньому»','Паштет із квасолі з часником і зеленню, тости',0,'Квасоля містить рослинне залізо. Найкраще — разом зі свіжими овочами.']
+]},
+{id:'salads',t:'Салати',s:'свіжість і сила',items:[
+['«Тепла печінка й апельсин»','Тепла куряча печінка, молодий шпинат, часточки апельсина, гарбузове насіння',1,'Печінка й апельсин — ідеальна пара: залізо плюс вітамін C в одній тарілці.'],
+['«Ростбіф»','Тонкі скибочки яловичини, рукола, солодкий перець, черрі, кунжутна заправка',1,'Яловичина — гемове залізо, перець і черрі — вітамін C.'],
+['«Рубіновий»','Печений буряк, чорнослив, волоський горіх, зелень',0,'Смачне доповнення до обіду. Заліза в буряку небагато, тож поєднуйте з м’ясною стравою.'],
+['«Табуле Maison»','Кіноа, багато петрушки й м’яти, томати, огірок, лимонна заправка',1,'Петрушка й кіноа — помітне джерело заліза, лимон допомагає засвоєнню.'],
+['«Сочевиця й перець»','Тепла сочевиця, печений перець, червона цибуля, петрушка, лимон',1,'Сочевиця — одна з найбагатших на залізо бобових, перець і лимон підсилюють засвоєння.'],
+['«Нісуаз»','Тунець, яйце, стручкова квасоля, черрі, листя салату',0,'Тунець і яйце — помірне джерело заліза.'],
+['Вінегрет «Фамільний»','Буряк, квасоля, квашена капуста, морква, ароматна олія',0,'Квасоля дає залізо, квашена капуста — вітамін C.']
+]},
+{id:'soups',t:'Супи',s:'гарячі й наваристі',items:[
+['Борщ «Рідний»','Наваристий червоний борщ на яловичині з квасолею і буряком, щедро приправлений зеленню',1,'Яловичина й квасоля — залізо, зелень і томати — вітамін C.'],
+['Крем-суп «Сочевиця й лимон»','Оксамитовий суп із червоної сочевиці з морквою і томатами, з краплею лимонного соку',1,'Червона сочевиця багата на залізо, а лимонний сік допомагає його засвоїти.'],
+['Суп «Нут і шпинат»','Ситний суп на яловичому бульйоні з нутом і молодим шпинатом',1,'Яловичий бульйон, нут і шпинат разом дають солідну порцію заліза.']
+]},
+{id:'hot',t:'Гарячі страви',s:'серце нашої кухні',items:[
+['Гуляш «Мадяр»','Томлена яловичина в пряному соусі, гречка, хрустка квашена капуста',1,'Яловичина — гемове залізо, квашена капуста — вітамін C.'],
+['Котлети «Фамільні»','Котлети з яловичини з печінкою за сімейним рецептом, тушкована квасоля з перцем',1,'Печінка у фарші помітно збільшує вміст заліза.'],
+['Язик «Імператорський»','Ніжний яловичий язик, картопляне пюре, зелений горошок, соус «Хрін-йогурт»',1,'Яловичий язик — смачне джерело гемового заліза.'],
+['Плов «Самарканд»','Плов із баранини з нутом, салат зі стиглих томатів',1,'Баранина й нут — залізо, свіжі томати — вітамін C.'],
+['Печінка «По-строганівськи»','Яловича печінка в томатному соусі з цибулею, броколі на пару',1,'Печінка в томатному соусі без вершків: залізо засвоюється краще.'],
+['Мідії «Середземномор’я»','Мідії в томатному соусі з часником і петрушкою, паста аль денте',1,'Мідії — одне з найкращих морських джерел заліза.'],
+['Індичка «Прованс»','Індичка, запечена з перцем, кабачком і томатами',0,'Темне м’ясо індички з овочами, багатими на вітамін C.'],
+['Скумбрія «Лимонний бриз»','Скумбрія, запечена з лимоном, на подушці зі шпинату, соус «Дзадзикі»',0,'Риба й шпинат дають залізо, лимон допомагає засвоєнню.'],
+['Серце «Томлене»','Яловиче серце, тушковане з овочами, гречка',1,'Яловиче серце дуже багате на залізо.'],
+['Вок «Зелений дракон»','Тофу або квасоля з овочами, обсмажені на сильному вогні, з кіноа',0,'Тофу, квасоля й кіноа — рослинне залізо, овочі — вітамін C.']
+]},
+{id:'sauces',t:'Соуси Maison',s:'2–3 ложки до страви',kind:'np',items:[
+['«Дзадзикі»','Безлактозний грецький йогурт, огірок, часник, кріп',0,'Подаємо маленьким соусником: трохи йогурту додає смаку і не заважає залізу.','до скумбрії, індички, котлет'],
+['«Білий лимонний»','Безлактозний грецький йогурт, лимонна цедра, зелень',0,'Лимон додає свіжості та вітаміну C.','до мідій, риби, брускет'],
+['«Хрін-йогурт»','Безлактозний грецький йогурт із тертим хроном',0,'Пікантний соус, який чудово пасує до яловичини.','до язика і ростбіфу']
+]},
+{id:'desserts',t:'Десерти',s:'солодке з користю',items:[
+['Трюфелі «Сила»','Цукерки ручної роботи з кураги, чорносливу, родзинок, горіхів і кунжуту',1,'Курага, кунжут і горіхи — концентроване рослинне залізо.'],
+['Шоколад «Чорне золото»','Чорний шоколад 70–85%, подається часточками',1,'Чорний шоколад містить чимало заліза. Достатньо 20–30 г.'],
+['Козинак «Східний»','Кунжут і гарбузове насіння на меду',1,'Кунжут і гарбузове насіння — лідери серед насіння за залізом.'],
+['Гарбуз «Осінній»','Запечений гарбуз із курагою і горіхами',0,'Курага й горіхи додають залізо до ніжного гарбуза.'],
+['Желе «Північні ягоди»','Желе з чорної смородини й журавлини',0,'Ягоди з великим вмістом вітаміну C — гарне завершення м’ясного обіду.'],
+['Печиво «Бабусине»','Вівсяне печиво з родзинками й кеш’ю',0,'Овес і кеш’ю містять рослинне залізо.'],
+['Брауні «Бордо»','Шоколадний брауні з буряком',0,'Шоколад додає трохи заліза, буряк — вологість і колір.']
+]},
+{id:'drinks',t:'Напої',s:'подаються до трапези',kind:'sm',items:[
+['Шипшина «Тайгова»','Відвар шипшини',0,'Шипшина — рекордсменка за вітаміном C, тому найкраще пити її під час їжі.'],
+['Морс «Смородиновий»','Чорна смородина або журавлина',0,'Ягідний морс із вітаміном C допомагає засвоювати залізо зі страв.'],
+['Фреш «Рубін»','Буряк, морква, яблуко',0,'Освіжальний овочевий фреш до обіду.'],
+['Апельсиновий фреш','Свіжовичавлений сік',0,'Вітамін C до сніданку. Ним також можна запивати препарат заліза, якщо лікар не проти.'],
+['Компот «Сонячний»','Курага й чорнослив',0,'Сухофрукти віддають компоту трохи заліза й природну солодкість.'],
+['Смузі «Смарагд»','Шпинат, ківі, банан, петрушка',0,'Шпинат і петрушка — залізо, ківі — вітамін C.'],
+['Томатний «Мері без Мері»','Томатний сік із лимоном і зеленню',0,'Томати й лимон — вітамін C до будь-якої страви.']
+]},
+{id:'between',t:'Між трапезами',s:'за 1–2 години після їжі',kind:'sm',note:'Чай, кава та молочне заважають засвоєнню заліза, тому ми подаємо їх окремо від основних страв.',items:[
+['Чай','Чорний, зелений, трав’яний',0,'Подаємо через годину-дві після їжі, щоб чай не заважав засвоєнню заліза.'],
+['Кава','Еспресо, американо, капучино на безлактозному молоці',0,'Подаємо окремо від основної трапези.'],
+['Какао «Оксамит»','На безлактозному молоці',0,'Затишний напій для перерви між трапезами.'],
+['Сирники «Бєлов»','З безлактозного сиру, з йогуртом і ягідним соусом',0,'Безлактозний сир так само містить кальцій, тому сирники — окремий перекус, а не частина основної трапези.'],
+['Сир «Мед і горіх»','Безлактозний сир, мед, волоський горіх',0,'Білковий перекус між трапезами.'],
+['Парфе «Ягідні шари»','Йогурт, гранола, ягоди',0,'Легкий десерт для перерви між трапезами.'],
+['Йогурт «Смак дня»','Фруктовий безлактозний йогурт на вибір',0,'Ваш улюблений смак — між основними прийомами їжі.'],
+['Смузі «Молочний банан»','Безлактозне молоко, банан, фініки, кориця',0,'Ситний молочний смузі для перекусу.']
+]}
+];
+const HERO={sec:'hot',i:0};
+
+const tg=window.Telegram&&window.Telegram.WebApp;
+if(tg){try{tg.ready();tg.expand();tg.setHeaderColor('#0A1326');tg.setBackgroundColor('#0A1326')}catch(e){}}
+
+function esc(s){return String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]))}
+function ph(photo,label,eager){return photo?'<img src="'+esc(photo)+'" alt="'+esc(label)+'"'+(eager?'':' loading="lazy"')+' decoding="async">':CAM+'<em>Фото незабаром</em>'}
+const PHOTO_PREFIX={breakfast:'c',starters:'z',salads:'s',soups:'u',hot:'h',desserts:'d',drinks:'n',between:'m'};
+function dishOf(sec,i){const d=sec.items[i];const p=PHOTO_PREFIX[sec.id];return{name:d[0],desc:d[1],fe:!!d[2],why:d[3],pair:d[4]||'',photo:d[5]||(p?'photos/'+p+(i+1)+'.jpg':'')}}
+
+const cats=document.getElementById('cats'),menu=document.getElementById('menu');
+let cHtml='',mHtml='';
+MENU.forEach((sec,si)=>{
+  cHtml+='<button class="cat" type="button" data-target="'+sec.id+'"'+(si===0?' aria-current="true"':'')+'>'+esc(sec.t)+'</button>';
+  let list='';
+  sec.items.forEach((_,i)=>{
+    const d=dishOf(sec,i),k=sec.kind||'';
+    const thumb=k==='np'?'':'<div class="ph">'+ph(d.photo,d.name)+'</div>';
+    list+='<button class="dish glass '+k+'" type="button" data-s="'+si+'" data-i="'+i+'">'+thumb+
+      '<div><div class="dn"><span>'+esc(d.name)+'</span>'+(d.fe?'<span class="fe">Fe+</span>':'')+'</div>'+
+      '<div class="dd">'+esc(d.desc)+'</div>'+(d.pair?'<div class="pair">'+esc(d.pair)+'</div>':'')+'</div></button>';
+  });
+  mHtml+='<section class="menu" id="'+sec.id+'" aria-labelledby="h-'+sec.id+'"><div class="sec-h"><h2 id="h-'+sec.id+'">'+esc(sec.t)+'</h2><span>'+esc(sec.s)+'</span></div>'+
+    (sec.note?'<div class="note glass">'+CLOCK+'<span>'+esc(sec.note)+'</span></div>':'')+
+    '<div class="list">'+list+'</div></section>';
+});
+cats.innerHTML=cHtml;menu.innerHTML=mHtml;
+
+const hs=MENU.findIndex(s=>s.id===HERO.sec),hd=dishOf(MENU[hs],HERO.i),hero=document.getElementById('hero');
+hero.dataset.s=hs;hero.dataset.i=HERO.i;
+hero.innerHTML='<div class="ph">'+ph(hd.photo,hd.name,true)+'</div><div class="hero-body"><span class="eyebrow">Рекомендація шефа</span><h3>'+esc(hd.name)+'</h3><p>'+esc(hd.desc)+'</p></div>';
+
+const reduceMotion=()=>matchMedia('(prefers-reduced-motion: reduce)').matches;
+const header=document.querySelector('header.top');
+let navLock=false,navTimer=0,activeId=MENU[0].id;
+
+function setActive(id){
+  if(id===activeId&&cats.querySelector('[aria-current="true"]'))return;
+  activeId=id;
+  cats.querySelectorAll('.cat').forEach(c=>{
+    if(c.dataset.target===id){
+      c.setAttribute('aria-current','true');
+      /* scroll only the pill row sideways, never the page */
+      const left=c.offsetLeft-(cats.clientWidth-c.offsetWidth)/2;
+      cats.scrollTo({left:Math.max(0,left),behavior:reduceMotion()?'auto':'smooth'});
+    }else c.removeAttribute('aria-current');
+  });
+}
+function goTo(id){
+  const el=document.getElementById(id);if(!el)return;
+  const offset=header.getBoundingClientRect().bottom+14;
+  const top=el.getBoundingClientRect().top+window.scrollY-offset;
+  navLock=true;clearTimeout(navTimer);
+  setActive(id);
+  window.scrollTo({top:Math.max(0,top),behavior:reduceMotion()?'auto':'smooth'});
+  navTimer=setTimeout(()=>{navLock=false},1000);
+}
+cats.addEventListener('click',e=>{
+  const b=e.target.closest('.cat');if(b)goTo(b.dataset.target);
+});
+window.addEventListener('scrollend',()=>{if(navLock){clearTimeout(navTimer);navTimer=setTimeout(()=>{navLock=false},80)}});
+
+function spy(){
+  if(navLock)return;
+  const line=header.getBoundingClientRect().bottom+window.innerHeight*0.2;
+  let cur=MENU[0].id;
+  document.querySelectorAll('section.menu').forEach(s=>{if(s.getBoundingClientRect().top<=line)cur=s.id});
+  setActive(cur);
+}
+let spyRaf=0;
+window.addEventListener('scroll',()=>{if(!spyRaf)spyRaf=requestAnimationFrame(()=>{spyRaf=0;spy()})},{passive:true});
+window.addEventListener('resize',spy);
+
+const sheet=document.getElementById('sheet'),scrim=document.getElementById('scrim');
+let lastFocus=null,closing=false;
+function tgSwipes(on){
+  if(!tg)return;
+  try{on?tg.enableVerticalSwipes&&tg.enableVerticalSwipes():tg.disableVerticalSwipes&&tg.disableVerticalSwipes()}catch(e){}
+}
+function openDish(si,i){
+  const sec=MENU[si],d=dishOf(sec,i);
+  const noPh=sec.kind==='np';
+  const p=document.getElementById('sh-ph');
+  p.hidden=noPh;if(!noPh)p.innerHTML=ph(d.photo,d.name,true);
+  document.getElementById('sh-title').textContent=d.name;
+  document.getElementById('sh-fe').innerHTML=d.fe?'<span class="fe">Fe+ багато заліза</span>':'';
+  document.getElementById('sh-desc').textContent=d.desc+(d.pair?' · '+d.pair:'');
+  document.getElementById('sh-why-t').textContent=d.why;
+  lastFocus=document.activeElement;
+  closing=false;
+  sheet.style.transition='';sheet.style.transform='';scrim.style.transition='';scrim.style.opacity='';
+  scrim.hidden=false;sheet.hidden=false;sheet.scrollTop=0;
+  document.documentElement.classList.add('locked');
+  document.getElementById('sh-close').focus({preventScroll:true});
+  if(tg&&tg.BackButton){try{tg.BackButton.show()}catch(e){}}
+  tgSwipes(false);
+}
+function finishClose(){
+  sheet.hidden=true;scrim.hidden=true;closing=false;
+  sheet.style.transition='';sheet.style.transform='';scrim.style.transition='';scrim.style.opacity='';
+  document.documentElement.classList.remove('locked');
+  if(tg&&tg.BackButton){try{tg.BackButton.hide()}catch(e){}}
+  tgSwipes(true);
+  if(lastFocus)lastFocus.focus({preventScroll:true});
+}
+function closeDish(){
+  if(sheet.hidden||closing)return;
+  closing=true;
+  if(reduceMotion()){finishClose();return}
+  sheet.style.transition='transform .26s cubic-bezier(.4,0,.2,1)';
+  scrim.style.transition='opacity .26s ease';
+  sheet.style.transform='translateY(110%)';
+  scrim.style.opacity='0';
+  setTimeout(finishClose,260);
+}
+document.addEventListener('click',e=>{
+  if(!sheet.hidden)return;
+  const b=e.target.closest('.dish,.hero');
+  if(b)openDish(+b.dataset.s,+b.dataset.i);
+});
+
+/* swipe down to close: from the handle anywhere, or from the content when it is scrolled to the top */
+let sy=null,dy=0,st=0,dragging=false;
+sheet.addEventListener('touchstart',e=>{
+  if(closing||e.touches.length>1){sy=null;return}
+  const onHandle=!!e.target.closest('.handle-zone');
+  if(!onHandle&&sheet.scrollTop>0){sy=null;return}
+  sy=e.touches[0].clientY;st=Date.now();dy=0;dragging=false;
+},{passive:true});
+sheet.addEventListener('touchmove',e=>{
+  if(sy===null)return;
+  const d=e.touches[0].clientY-sy;
+  if(!dragging){
+    if(d>6&&sheet.scrollTop<=0){dragging=true;sheet.style.transition='none';scrim.style.transition='none'}
+    else if(d<-6){sy=null;return}
+    else return;
+  }
+  e.preventDefault();
+  dy=Math.max(0,d);
+  sheet.style.transform='translateY('+dy+'px)';
+  scrim.style.opacity=String(Math.max(0,1-dy/(sheet.offsetHeight||1)));
+},{passive:false});
+function endDrag(){
+  if(sy===null)return;
+  sy=null;
+  if(!dragging)return;
+  dragging=false;
+  const v=dy/Math.max(1,Date.now()-st);
+  if(dy>110||v>0.6){closeDish()}
+  else{
+    sheet.style.transition='transform .22s cubic-bezier(.2,.8,.2,1)';scrim.style.transition='opacity .22s ease';
+    sheet.style.transform='';scrim.style.opacity='';
+  }
+}
+sheet.addEventListener('touchend',endDrag);
+sheet.addEventListener('touchcancel',endDrag);
+scrim.addEventListener('click',closeDish);
+document.getElementById('sh-close').addEventListener('click',closeDish);
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeDish()});
+if(tg&&tg.BackButton){try{tg.BackButton.onClick(closeDish)}catch(e){}}
+</script>
+
+</body>
+</html>
