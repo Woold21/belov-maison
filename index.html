@@ -8,7 +8,7 @@
 <title>Belov Maison</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700&family=Playfair+Display:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700&display=swap">
 <style>
 /* Layout: one dark "midnight" glass app — sticky glass header with category pills, chef's pick hero, sections of glass dish rows, bottom sheet for details */
 :root{
@@ -24,7 +24,7 @@
   --champ-ink:#14100A;
   --ph:rgba(217,195,160,.07);
   --font:'Onest',ui-sans-serif,system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;
-  --accent:'Playfair Display',Georgia,'Times New Roman',serif;
+  --accent:var(--font);
   --r-card:22px;
   --r-thumb:18px;
   color-scheme:dark;
@@ -121,15 +121,15 @@ section.menu:last-of-type{min-height:calc(100vh - 200px)}
 .why b{font-size:12px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--champ)}
 .why p{margin:0;font-size:14px}
 
-/* accent labels: upright Playfair Display instead of tracked uppercase */
+/* accent labels: the main sans face, champagne, sentence case */
 .brandrow small,.ph em,.eyebrow,.sec-h span,.why b,footer.chef .sig,.fe,.pair{font-family:var(--accent);font-style:normal;text-transform:none;letter-spacing:0}
-.brandrow small{font-size:16px;color:var(--champ)}
+.brandrow small{font-size:15px;font-weight:500;color:var(--champ)}
 .ph em{font-size:15px;color:var(--champ);opacity:.85}
-.eyebrow{font-size:17px;font-weight:500}
-.sec-h span{font-size:15px;color:var(--champ);opacity:.9}
-.why b{font-size:17px;font-weight:500}
-footer.chef .sig{font-size:17px}
-.fe{font-size:13px;font-weight:500;padding:2px 10px 3px}
+.eyebrow{font-size:15px;font-weight:500}
+.sec-h span{font-size:14px;font-weight:500;color:var(--champ);opacity:.9}
+.why b{font-size:15px;font-weight:600}
+footer.chef .sig{font-size:15px;font-weight:500}
+.fe{font-size:12px;font-weight:600;padding:3px 9px}
 .pair{font-size:14px}
 /* ---------- order / cart ---------- */
 .dish-wrap{position:relative}
@@ -169,7 +169,7 @@ body.has-cart .app{padding-bottom:110px}
 .c-item .ph svg{width:18px;height:18px}
 .c-item .nm{font-size:15px;font-weight:600;line-height:1.3}
 .c-item .sc{font-size:12px;color:var(--mut)}
-.c-label{margin:22px 0 10px;font-family:var(--accent);font-size:17px;color:var(--champ)}
+.c-label{margin:22px 0 10px;font-family:var(--accent);font-size:15px;font-weight:600;color:var(--champ)}
 .chips{display:flex;flex-wrap:wrap;gap:8px}
 .chip{font:500 14px/1 var(--font);color:var(--fg);background:rgba(255,255,255,.06);border:1px solid var(--stroke);border-radius:99px;padding:10px 14px;cursor:pointer;font-variant-numeric:tabular-nums}
 .chip[aria-pressed="true"]{background:var(--champ);color:var(--champ-ink);border-color:var(--champ)}
