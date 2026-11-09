@@ -133,7 +133,8 @@ footer.chef .sig{font-size:17px}
 .pair{font-size:14px}
 /* ---------- order / cart ---------- */
 .dish-wrap{position:relative}
-.dish{padding-right:60px}
+.dish{padding-right:62px}
+.fe-corner{position:absolute;top:10px;right:10px;pointer-events:none;font-size:12px;padding:2px 8px 3px;min-width:40px;justify-content:center}
 .add{position:absolute;right:10px;bottom:10px;min-width:40px;height:40px;padding:0 12px;border-radius:99px;border:1px solid rgba(217,195,160,.35);background:rgba(217,195,160,.12);color:var(--champ);font:600 15px/1 var(--font);display:flex;align-items:center;justify-content:center;gap:4px;cursor:pointer;transition:background .2s,color .2s,transform .15s}
 .add:hover{background:rgba(217,195,160,.22)}
 .add:active{transform:scale(.94)}
@@ -348,8 +349,9 @@ MENU.forEach((sec,si)=>{
     const d=dishOf(sec,i),k=sec.kind||'';
     const thumb=k==='np'?'':'<div class="ph">'+ph(d.photo,d.name)+'</div>';
     list+='<div class="dish-wrap"><button class="dish glass '+k+'" type="button" data-s="'+si+'" data-i="'+i+'">'+thumb+
-      '<div><div class="dn"><span>'+esc(d.name)+'</span>'+(d.fe?'<span class="fe">Fe+</span>':'')+'</div>'+
+      '<div><div class="dn"><span>'+esc(d.name)+'</span></div>'+
       '<div class="dd">'+esc(d.desc)+'</div>'+(d.pair?'<div class="pair">'+esc(d.pair)+'</div>':'')+'</div></button>'+
+      (d.fe?'<span class="fe fe-corner" aria-label="Багато заліза">Fe+</span>':'')+
       '<button class="add" type="button" data-add="'+si+'.'+i+'" aria-label="Додати «'+esc(d.name)+'» до замовлення"></button></div>';
   });
   mHtml+='<section class="menu" id="'+sec.id+'" aria-labelledby="h-'+sec.id+'"><div class="sec-h"><h2 id="h-'+sec.id+'">'+esc(sec.t)+'</h2><span>'+esc(sec.s)+'</span></div>'+
@@ -546,18 +548,25 @@ function sendOrder(){
   fixWhen();
   if(!when.time){renderCart();return}
   const text=orderText();
-  const url='https://t.me/'+CHEF+'?text='+encodeURIComponent(text);
-  let opened=false;
-  try{if(tg&&tg.openTelegramLink){tg.openTelegramLink(url);opened=true}}catch(e){}
-  if(!opened){const w=window.open(url,'_blank','noopener');opened=!!w;if(!opened){location.href=url;opened=true}}
+  openChat(text);
   try{navigator.clipboard&&navigator.clipboard.writeText(text).catch(()=>{})}catch(e){}
-  cartDone=true;
+  /* the order now lives in the chat: empty the cart right away */
+  lastText=text;cart={};wish='';when.time='';save();
+  cartDone=true;renderAll();
   paneCart.innerHTML='<div class="c-head"><h3>Майже готово</h3><button class="close glass" type="button" data-close aria-label="Закрити">'+XICON+'</button></div>'+
     '<div class="c-done"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 2 11 13"/><path d="M22 2 15 22l-4-9-9-4z"/></svg>'+
     '<h4>Надішліть повідомлення шефу</h4><p>У чаті з @'+CHEF+' уже є текст замовлення. Натисніть «Надіслати», і шеф отримає його.</p>'+
     '<p>Якщо чат не відкрився, текст замовлення скопійовано. Вставте його в чат із @'+CHEF+'.</p>'+
-    '<div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:6px"><button class="ghost" type="button" id="send">Відкрити чат ще раз</button><button class="primary" type="button" data-new style="flex:none">Нове замовлення</button></div></div>';
+    '<div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:6px"><button class="ghost" type="button" id="resend">Відкрити чат ще раз</button><button class="primary" type="button" data-close style="flex:none">До меню</button></div></div>';
 }
+let lastText='';
+function openChat(text){
+  const url='https://t.me/'+CHEF+'?text='+encodeURIComponent(text);
+  let opened=false;
+  try{if(tg&&tg.openTelegramLink){tg.openTelegramLink(url);opened=true}}catch(e){}
+  if(!opened){let w=null;try{w=window.open(url,'_blank')}catch(e){}if(w){try{w.opener=null}catch(e){}}else location.href=url}
+}
+paneCart.addEventListener('click',e=>{if(e.target.closest('#resend')&&lastText)openChat(lastText)});
 document.getElementById('cartbar-btn').addEventListener('click',openCart);
 renderAll();
 
